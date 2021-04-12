@@ -18,11 +18,6 @@ from django.urls import path, include
 from core import views as core_views
 
 from django.contrib.auth import views as auth_views
-from django.conf import settings
-from django.conf.urls.static import static
-
-from django.views.static import serve
-from django.conf.urls import url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,7 +30,5 @@ urlpatterns = [
     path('db/',core_views.db_store_view,name='db'),
     path('oauth/', include('social_django.urls', namespace='social')),  # <-- here
     path('settings/', core_views.SettingsView.as_view(), name='settings'),
-    url(r'^media/(?P<path>.*)$', serve,{'document_root':       settings.MEDIA_ROOT}), 
-    url(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}), 
    # path('settings/password/', core_views.password, name='password'),
 ]
