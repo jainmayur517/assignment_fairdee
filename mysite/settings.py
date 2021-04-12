@@ -11,6 +11,13 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 import django_heroku
 import os
+from django.core.wsgi import get_wsgi_application
+from whitenoise.django import DjangoWhiteNoise
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bootcamp.settings")
+
+application = get_wsgi_application()
+application = DjangoWhiteNoise(application)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -134,8 +141,14 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
+)
+
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
