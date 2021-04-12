@@ -1,0 +1,53 @@
+<!-- base.html -->
+<html>
+    <head>
+        <title>{% block title %}{% endblock title %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+        
+        {% block css %} {% endblock css %}
+    </head>
+    <body>
+        <style>
+            body {
+  background-image: url("https://mdbootstrap.com/img/Photos/Others/images/76.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+            .footer {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                background-color: red;
+                color: white;
+                text-align: center;
+            }
+        </style>
+     
+
+        
+      
+        <h1 style="text-align:center"><strong>TWittx2</strong></h1>
+        <hr/>
+        
+
+        {% if user.is_authenticated %}
+        <p style="text-align:center">You are signed in as <strong>{{user.username}}</strong></p>
+        <br>
+        <button><a href="{% url 'logout' %}">logout</a></button>
+        {% endif %}
+
+        <hr>
+
+        {% block content %} {% endblock content %}
+
+        {% block javascript %} {% endblock javascript %}
+        </div>
+        
+        <div class="footer">
+            <p>© 2021 Copyright: jainmayur517</p>
+        </div>
+    </body>
+</html>

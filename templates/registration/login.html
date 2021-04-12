@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Login Page{% endblock title %}
+
+{% block content %}
+<h1 style="text-align:center">Hey YOU, Welcome aboard!!</h1>
+
+
+<br>
+<br>
+<p style="text-align:center"><img
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIhcnWkuvDkYWtuIeUOhFLYm7ywI7MAoHBJg&usqp=CAU"
+        class="img-rounded" width=400px alt="Cinque Terre"></p>
+<h1 style="text-align:center"><a class="btn btn-primary" href="{% url 'social:begin' 'twitter' %}" role="button">sign in
+        with twitter</a></h1>
+<div>
+    <a href="/db">storage</a>
+</div>
+
+{% endblock content %}
