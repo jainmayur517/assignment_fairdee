@@ -25,27 +25,27 @@ class SettingsView(LoginRequiredMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         user = request.user
 
+
         try:
             twitter_login = user.social_auth.get(provider='twitter')
             print(twitter_login.access_token)
             userid=twitter_login.access_token['user_id']
             screen_name=twitter_login.access_token['screen_name']
+
             auth = tweepy.OAuthHandler('okwoO0j3AxHqTTgvxH0Imb1OD','1iZgQDRs7IPv4HsUh36iHQuyBp3Ayn6g2l6iI83E8Hiu75NL3B')
             auth.set_access_token('1129150375720677377-ulmKDn7cD9YkbfSBykS5C2cBo4RHYp','f99siM42vcTDueq4treAVkquuJ80ptnP1li2Llr72lBVQ')
             api=tweepy.API(auth) 
             tweets = api.user_timeline(screen_name=screen_name)
-       #    print(tweets.text)
+
 
             friendl=api.friends(screen_name)
-          #  print(friendl.status)
+
 
             listf=[]
             for friend in friendl:
                 listf.append(friend.screen_name)
 
-
-    #        print(listf)
-
+            
 
             try:
                 response = requests.get('https://sleepy-ridge-86379.herokuapp.com/results?bm='+screen_name)
@@ -55,14 +55,8 @@ class SettingsView(LoginRequiredMixin, TemplateView):
                 print("json error")
 
             
-
-    
-
-
-            
-            
  
-            ff=api.get_user(userid)
+            ff=api.get_user(userid)     #to get a resizable profile pic
             profiler_photo=ff.profile_image_url_https
 
             uu=profiler_photo.replace('_normal','')
@@ -84,14 +78,10 @@ class SettingsView(LoginRequiredMixin, TemplateView):
                     print("duplicacy")
                     break
 
-
-                    
-            print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+                
 
 
-
-
-            for i in listf:
+            for i in listf:                     #for following storage
 
                 try:
                     response2 = requests.get('https://sleepy-ridge-86379.herokuapp.com/results?bm='+i)
@@ -104,13 +94,7 @@ class SettingsView(LoginRequiredMixin, TemplateView):
                 screen_namef=parsed2[0]["user"]["screen_name"]
 
                 for i in range(0,len(parsed2)):
-                    '''
-                    hasht=parsed2[i]["entities"]["hashtags"]
-                    tags=[]
-                    if hasht:
-                        tags = [li["text"] for li in hasht]
-                    print(tags)
-                    '''    
+
                     desc2=parsed2[i]["text"]
                     url2="https://twitter.com/geeksforgeeks/status/"+str(parsed2[i]["id_str"])
 
@@ -121,42 +105,7 @@ class SettingsView(LoginRequiredMixin, TemplateView):
                     except IntegrityError as e:
                         print("duplicacy")
                         break 
-                    
-                                
-
-
-
-
- 
-
-
-            
-                
-
-
-            
-
-
-
-
-
-    
-
-             
-  #          print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
-   #         tmp=[] 
-
-
-  
-      
-    #        tweets_for_csv = [tweet.text for tweet in tweets] # CSV file created 
-    #       for j in tweets_for_csv:
-    #            tmp.append(j) 
-                              
-    #        print(tmp)
-
-            
-
+                                                    
 
         except UserSocialAuth.DoesNotExist:
             twitter_login = None
@@ -191,10 +140,6 @@ def db_store_view(request):               #database queries for rendering to fro
     print(total_tweets)
 
 
-
-
-
-
     friend_tweets=friendtweet.objects.all       #db2 of following
     b=friendtweet.objects.values_list('friend_name').annotate(user2_count=Count('friend_name')).order_by('-user2_count')
     print(b)
@@ -209,43 +154,6 @@ def db_store_view(request):               #database queries for rendering to fro
         total_ftweets+=q[1] 
 
     print(total_ftweets)  
-
-
-
-
-
+    
     return render(request,'db.html',{'all':all_tweets,'top':top,'total_tweets':total_tweets, 'total_master':size_m,'friend_tweets':friend_tweets,'size_f':size_f,'total_ftweets':total_ftweets,'topf':topf})
 
-
-
-
-
-
-
-
-
-
-
-
-'''
-
-@login_required
-def password(request):
-    if request.user.has_usable_password():
-        PasswordForm = PasswordChangeForm
-    else:
-        PasswordForm = AdminPasswordChangeForm
-
-    if request.method == 'POST':
-        form = PasswordForm(request.user, request.POST)
-        if form.is_valid():
-            form.save()
-            update_session_auth_hash(request, form.user)
-            messages.success(request, 'Your password was successfully updated!')
-            return redirect('password')
-        else:
-            messages.error(request, 'Please correct the error below.')
-    else:
-        form = PasswordForm(request.user)
-    return render(request, 'core/password.html', {'form': form})
-'''
